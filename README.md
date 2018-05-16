@@ -16,3 +16,6 @@ Algorithms implemented so far
 - [Randomized Prims](https://github.com/Average-user/MazeGen/src/Prims)
 - [Recursive Backtracker](https://github.com/Average-user/MazeGen/src/Backtracker)
 - [Sidewinder](https://github.com/Average-user/MazeGen/src/Sidewinder)
+
+An example of a 50x50 maze:
+![](https://github.com/Average-user/MazeGen/Pictures/example.png?raw=true)
