@@ -20,7 +20,7 @@ Algorithms implemented so far
 #### Usage
 Tu run use:
 
-``` shell
+``` text
 stack build
 stack exec MazeGen-exe p a n m
 ```
@@ -31,7 +31,7 @@ it will just be the maze.
 
 **a** stands for the algorithm you can see here the order:
 
-``` Haskell
+``` haskell
 pickAlgorithm n = case n of
                     1 -> Sidewinder.generate
                     2 -> Prims.generate
@@ -44,4 +44,10 @@ pickAlgorithm n = case n of
 
 An example of a 50x50 maze, with path included:
 
+``` text
+stack exec MazeGen-exe 1 5 50 50
+```
+
 ![](https://github.com/Average-user/MazeGen/blob/master/Pictures/example.png)
+
+```
