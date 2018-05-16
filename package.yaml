@@ -1,0 +1,52 @@
+name:                MazeGen
+version:             0.1.0.0
+github:              "Average-user/MazeGen"
+license:             MIT
+author:              "Lucas Polymeris"
+maintainer:          "lucaspolymeris@pm.me"
+copyright:           "2018 Lucas Polymeris"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Implementation of several maze generation algorithms
+# category:            Algorithm
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description: Please see the README on GitHub at <https://github.com/Average-user/MazeGen#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- random
+- time
+- gloss
+
+library:
+  source-dirs: src
+
+executables:
+  MazeGen-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - MazeGen
+
+tests:
+  MazeGen-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - MazeGen
