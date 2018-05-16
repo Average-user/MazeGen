@@ -1,0 +1,22 @@
+<h1 id="haskell-maze-generator">Haskell Maze Generator</h1>
+<p>This software provides an implementation of several algorithms to generate mazes. The mazes are shown with <a href="https://hackage.haskell.org/package/gloss">Gloss</a> (2D vector graphics, package for Haskell) and as an optional parameter, the program can draw the path between the upper-left and bottom-right corner, since this can help to visualize the difference of styles between the algorithms. This project is strongly inspired by <a href="http://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap">this</a> blog of Maze Generation algorithms</p>
+<h4 id="usage">Usage</h4>
+<p>Tu run use:</p>
+<pre class="shell"><code>stack build
+stack exec MazeGen-exe p a n m</code></pre>
+<p><strong>p</strong>, <strong>a</strong>, <strong>n</strong> and <strong>m</strong> are Integers. Only when <strong>p</strong> is 1 the path will be drawn, in any other case it will just be the maze.</p>
+<p><strong>a</strong> stands for the algorithm you can see here the order:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">pickAlgorithm ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> ((<span class="dt">Int</span>,<span class="dt">Int</span>) <span class="ot">-&gt;</span> <span class="dt">StdGen</span> <span class="ot">-&gt;</span> <span class="dt">Graph</span>)
+pickAlgorithm n <span class="fu">=</span> <span class="kw">case</span> n <span class="kw">of</span>
+                    <span class="dv">1</span> <span class="ot">-&gt;</span> Sidewinder.generate
+                    <span class="dv">2</span> <span class="ot">-&gt;</span> Prims.generate
+                    <span class="dv">3</span> <span class="ot">-&gt;</span> GrowingTree.generate
+                    <span class="dv">4</span> <span class="ot">-&gt;</span> HuntKill.generate
+                    <span class="dv">5</span> <span class="ot">-&gt;</span> Backtracker.generate</code></pre></div>
+<p><strong>n</strong> and <strong>m</strong> are the sizes of the maze, horizontal an vertical respectively.</p>
+<p>Algorithms implemented so far - <a href="https://github.com/Average-user/MazeGen/tree/master/src/GrowingTree.hs">Growing Tree</a> - <a href="https://github.com/Average-user/MazeGen/tree/master/src/HuntKill.hs">Hunt And Kill</a> - <a href="https://github.com/Average-user/MazeGen/tree/master/src/Prims.hs">Randomized Prims</a> - <a href="https://github.com/Average-user/MazeGen/tree/master/src/Backtracker.hs">Recursive Backtracker</a> - <a href="https://github.com/Average-user/MazeGen/tree/master/src/Sidewinder.hs">Sidewinder</a></p>
+<p>An example of a 50x50 maze, with path included:</p>
+<div class="figure">
+<img src="https://github.com/Average-user/MazeGen/blob/master/Pictures/example.png" />
+
+</div>

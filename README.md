@@ -17,6 +17,31 @@ Algorithms implemented so far
 - [Recursive Backtracker](https://github.com/Average-user/MazeGen/tree/master/src/Backtracker.hs)
 - [Sidewinder](https://github.com/Average-user/MazeGen/tree/master/src/Sidewinder.hs)
 
-An example of a 50x50 maze:
+#### Usage
+Tu run use:
+
+``` shell
+stack build
+stack exec MazeGen-exe p a n m
+```
+
+**p**, **a**, **n** and **m** are Integers.
+Only when **p** is 1 the path will be drawn, in any other case
+it will just be the maze.
+
+**a** stands for the algorithm you can see here the order:
+
+``` Haskell
+pickAlgorithm n = case n of
+                    1 -> Sidewinder.generate
+                    2 -> Prims.generate
+                    3 -> GrowingTree.generate
+                    4 -> HuntKill.generate
+                    5 -> Backtracker.generate
+```
+
+**n** and **m** are the sizes of the maze, horizontal an vertical respectively.
+
+An example of a 50x50 maze, with path included:
 
 ![](https://github.com/Average-user/MazeGen/blob/master/Pictures/example.png)
