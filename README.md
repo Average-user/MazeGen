@@ -11,11 +11,12 @@ the algorithms. This project is strongly inspired by
 blog of Maze Generation algorithms
 
 Algorithms implemented so far
-- [Growing Tree](https://github.com/Average-user/MazeGen/src/GrowingTree)
-- [Hunt And Kill](https://github.com/Average-user/MazeGen/src/HuntKill)
-- [Randomized Prims](https://github.com/Average-user/MazeGen/src/Prims)
-- [Recursive Backtracker](https://github.com/Average-user/MazeGen/src/Backtracker)
-- [Sidewinder](https://github.com/Average-user/MazeGen/src/Sidewinder)
+- [Growing Tree](https://github.com/Average-user/MazeGen/tree/master/src/GrowingTree.hs)
+- [Hunt And Kill](https://github.com/Average-user/MazeGen/tree/master/src/HuntKill.hs)
+- [Randomized Prims](https://github.com/Average-user/MazeGen/tree/master/src/Prims.hs)
+- [Recursive Backtracker](https://github.com/Average-user/MazeGen/tree/master/src/Backtracker.hs)
+- [Sidewinder](https://github.com/Average-user/MazeGen/tree/master/src/Sidewinder.hs)
 
 An example of a 50x50 maze:
-![](https://github.com/Average-user/MazeGen/Pictures/example.png?raw=true)
+
+![](https://github.com/Average-user/MazeGen/tree/master/Pictures/example.png?raw=true)
