@@ -19,4 +19,4 @@ Algorithms implemented so far
 
 An example of a 50x50 maze:
 
-![](https://github.com/Average-user/MazeGen/tree/master/Pictures/example.png?raw=true)
+![](https://github.com/Average-user/MazeGen/blob/master/Pictures/example.png)
