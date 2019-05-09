@@ -2,7 +2,6 @@
 
 module Main where
 
-import qualified Data.Map as M
 import           Data.Maybe
 import qualified Data.Set as S
 import           Data.Time.Clock
@@ -13,6 +12,7 @@ import           System.Environment (getArgs)
 import           System.Random (getStdGen, StdGen)
 import           Utils
 import           Data.List ((\\))
+import           Data.Array
 
 -- | Algorithms implemented so far
 import qualified HuntKill
@@ -37,8 +37,8 @@ drawWalls ::
   Picture              {- ^ The walls of course         -}
 drawWalls f graph (x,y) = Pictures $ catMaybes fr'
   where
-    ns  = graph M.! (x, y)
-    fr  = map ((,) <*> flip S.notMember ns) [(x,y-1),(x,y+1),(x-1,y),(x+1,y)]
+    ns  = graph ! (x, y)
+    fr  = map ((,) <*> flip notElem ns) [(x,y-1),(x,y+1),(x-1,y),(x+1,y)]
     fr' = map (\(v,b) -> if b then Just (close (x,y) v) else Nothing) fr
     close (x,y) (j,k) | y == k && j > x = line [f (j,k), f (j,k+1)]
                       | y == k          = line [f (x,y), f (x,y+1)]
@@ -74,7 +74,7 @@ main = do
       c          = getConstant w h (fromIntegral n) (fromIntegral m)
       hc         = c/2
       !graph     = pickAlgorithm a r (n,m) gen
-      grid       = Pictures $ map (drawWalls (s' c) graph) (M.keys graph)
+      grid       = Pictures $ map (drawWalls (s' c) graph) (indices graph)
       pathsC     = paths graph (0,0) (n-1,m-1)
       minL       = minimum (map length pathsC)
       shortOnes  = filter ((==minL) . length) pathsC

@@ -25,6 +25,7 @@ dependencies:
 - random
 - time
 - gloss
+- array
 
 library:
   source-dirs: src
