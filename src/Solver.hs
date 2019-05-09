@@ -7,10 +7,11 @@ import           Data.Set (Set, toList, delete)
 import qualified Data.Set as S
 import qualified Data.Map as M
 
-path :: Ord a =>  Map a (Set a) -> a -> a -> Maybe [a]
-path graph s e = find (const True) $ mapMaybe (dfs [s]) $ toList (graph ! s)  
+paths :: Ord a => Map a (Set a) -> a -> a -> [[a]]
+paths graph s e = dfs (S.singleton s) [s] =<< graph' ! s
   where
-    dfs (p:acc) n | n == e    = Just (n:p:acc)
-                  | otherwise = find (const True) ops
-      where
-        ops = mapMaybe (dfs (n:p:acc)) $ toList $ delete p $ graph ! n
+    graph' = M.map toList graph
+    dfs seen (p:acc) n
+      | n == e          = [n:p:acc]
+      | S.member n seen = []
+      | otherwise       = dfs (S.insert n seen) (n:p:acc) =<< graph' ! n

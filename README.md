@@ -22,12 +22,14 @@ Tu run use:
 
 ``` text
 stack build
-stack exec MazeGen-exe p a n m
+stack exec MazeGen-exe p r a n m
 ```
 
-**p**, **a**, **n** and **m** are Integers.
-Only when **p** is 1 the path will be drawn, in any other case
-it will just be the maze.
+**p**, **r** **a**, **n** and **m** are Integers.
+Only when **p** is 1  paths will be drawn, in any other case
+it will just be the maze. **r** indicates, the amount of walls to be removed, to
+make non-perfect mazes. If perfect mazes are desired, let r = 0. When paths are
+drawn, the red ones will be the shorter ones.
 
 **a** stands for the algorithm you can see here the order:
 
@@ -45,7 +47,7 @@ pickAlgorithm n = case n of
 An example of a 50x50 maze, with path included:
 
 ``` text
-stack exec MazeGen-exe 1 5 50 50
+stack exec MazeGen-exe 1 0 5 50 50
 ```
 
 ![](https://github.com/Average-user/MazeGen/blob/master/Pictures/example.png)

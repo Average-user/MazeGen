@@ -12,6 +12,7 @@ import           Solver
 import           System.Environment (getArgs)
 import           System.Random (getStdGen, StdGen)
 import           Utils
+import           Data.List ((\\))
 
 -- | Algorithms implemented so far
 import qualified HuntKill
@@ -20,13 +21,13 @@ import qualified Prims
 import qualified GrowingTree
 import qualified Backtracker
 
-pickAlgorithm :: Int -> ((Int,Int) -> StdGen -> Graph)
+pickAlgorithm :: Int -> (Int -> (Int,Int) -> StdGen -> Graph)
 pickAlgorithm n = case n of
-                    1 -> Sidewinder.generate
-                    2 -> Prims.generate
-                    3 -> GrowingTree.generate
-                    4 -> HuntKill.generate
-                    5 -> Backtracker.generate
+                    1 -> nonPerfect Sidewinder.generate
+                    2 -> nonPerfect Prims.generate
+                    3 -> nonPerfect GrowingTree.generate
+                    4 -> nonPerfect HuntKill.generate
+                    5 -> nonPerfect Backtracker.generate
 
 -- | Draw walls to de the adjacent cell of (x,y) that are not connected with it
 drawWalls ::
@@ -34,7 +35,7 @@ drawWalls ::
   Graph                {- ^ The maze                    -} ->
   (Int, Int)           {- ^ The Coordinate (x,y)        -} ->
   Picture              {- ^ The walls of course         -}
-drawWalls f graph (x,y) = Pictures $ mapMaybe id fr'
+drawWalls f graph (x,y) = Pictures $ catMaybes fr'
   where
     ns  = graph M.! (x, y)
     fr  = map ((,) <*> flip S.notMember ns) [(x,y-1),(x,y+1),(x-1,y),(x+1,y)]
@@ -61,7 +62,6 @@ c1 = 5
 getConstant :: Float -> Float -> Float -> Float -> Float
 getConstant w h n m = min ((w-c1-c1) / n) ((h-c1-c1) / m)
 
-
 main :: IO ()
 main = do
   gen     <- getStdGen
@@ -70,16 +70,20 @@ main = do
   let (w,h)      = (fromIntegral w', fromIntegral h')
       s c (x,y)  = ((x*c) - (w/2) + c1, (h/2) - c1 - (y*c))
       s' c (x,y) = s c (fromIntegral x, fromIntegral y)
-      [p,a,n,m]  = args
+      [p,r,a,n,m]= args
       c          = getConstant w h (fromIntegral n) (fromIntegral m)
       hc         = c/2
-      !graph     = pickAlgorithm a (n,m) gen
+      !graph     = pickAlgorithm a r (n,m) gen
       grid       = Pictures $ map (drawWalls (s' c) graph) (M.keys graph)
-      pathC      = fromJust $ path graph (0,0) (n-1,m-1)
-      sol        = Color violet $ line $ map (f 0 . s' c) pathC
+      pathsC     = paths graph (0,0) (n-1,m-1)
+      minL       = minimum (map length pathsC)
+      shortOnes  = filter ((==minL) . length) pathsC
+      largeOnes  = filter ((/=minL) . length) pathsC
+      sols       = map (Color violet . line . map (f 0 . s' c)) largeOnes
+      goodSols   = map (Color red . line . map (f 0 . s' c)) shortOnes
       f z (x,y)  = (x + hc + z, y - hc + z)
-      startp     = square (s c) (0,0) violet
-      goalp      = square (s c) (fromIntegral (n-1), fromIntegral (m-1)) violet
+      startp     = square (s c) (0,0) red
+      goalp      = square (s c) (fromIntegral (n-1), fromIntegral (m-1)) red
   display FullScreen white (if p == 1
-                             then Pictures [sol, startp, goalp, grid]
+                             then Pictures (sols ++ goodSols ++ [startp, goalp, grid])
                              else grid)
