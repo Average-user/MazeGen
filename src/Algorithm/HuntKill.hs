@@ -1,4 +1,4 @@
-module HuntKill where
+module Algorithm.HuntKill where
 
 import Data.Set (Set, insert, notMember, member, singleton)
 import System.Random (StdGen, randomR)

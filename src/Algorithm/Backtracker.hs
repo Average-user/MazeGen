@@ -1,4 +1,4 @@
-module Backtracker where
+module Algorithm.Backtracker where
 
 import Utils
 import qualified Data.Map as M

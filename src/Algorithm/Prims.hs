@@ -1,4 +1,4 @@
-module Prims where
+module Algorithm.Prims where
 
 import Utils
 

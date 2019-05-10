@@ -14,18 +14,18 @@ import           ParseConfig
 import qualified Data.ByteString.Lazy as B
 
 -- | Algorithms implemented so far
-import qualified HuntKill
-import qualified Sidewinder
-import qualified Prims
-import qualified GrowingTree
-import qualified Backtracker
+import qualified Algorithm.HuntKill
+import qualified Algorithm.Sidewinder
+import qualified Algorithm.Prims
+import qualified Algorithm.GrowingTree
+import qualified Algorithm.Backtracker
 
 getAlgorithm :: Algorithm -> ((Int, Int) -> StdGen -> Graph)
-getAlgorithm Backtracker = Backtracker.generate
-getAlgorithm Prims       = Prims.generate
-getAlgorithm HuntKill    = HuntKill.generate
-getAlgorithm Sidewinder  = Sidewinder.generate
-getAlgorithm GrowingTree = GrowingTree.generate
+getAlgorithm Backtracker = Algorithm.Backtracker.generate
+getAlgorithm Prims       = Algorithm.Prims.generate
+getAlgorithm HuntKill    = Algorithm.HuntKill.generate
+getAlgorithm Sidewinder  = Algorithm.Sidewinder.generate
+getAlgorithm GrowingTree = Algorithm.GrowingTree.generate
 
 -- | Draw walls to de the adjacent cell of (x,y) that are not connected with it
 drawWalls ::

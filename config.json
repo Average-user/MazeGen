@@ -4,5 +4,5 @@
     "walls-to-remove": "10",
     "draw-paths": "True",
     "path-starting-point": "(0,0)",
-    "path-ending-point": "(29, 29)"
+    "path-ending-point": "(29,29)"
 }

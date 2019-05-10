@@ -1,4 +1,4 @@
-module GrowingTree where
+module Algorithm.GrowingTree where
 
 import Utils
 import qualified Data.Set as S
