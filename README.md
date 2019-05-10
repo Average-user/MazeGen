@@ -3,10 +3,9 @@
 This software provides an implementation of several algorithms to generate
 mazes. The mazes are shown with
 [Gloss](https://hackage.haskell.org/package/gloss)
-(2D vector graphics, package for Haskell) and as an optional parameter,
-the program can draw the path between the upper-left and bottom-right
-corner, since this can help to visualize the difference of styles between
-the algorithms. This project is strongly inspired by
+(2D vector graphics, package for Haskell). It also allows to draw paths from one
+place to another, and is capable of generating perfect and non-perfect mazes.
+This project is strongly inspired by
 [this](http://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)
 blog of Maze Generation algorithms
 
@@ -18,36 +17,35 @@ Algorithms implemented so far
 - [Sidewinder](https://github.com/Average-user/MazeGen/tree/master/src/Sidewinder.hs)
 
 #### Usage
-Tu run use:
+
+The parameters for building the maze, are specified in `config.json` file. Which
+by default is:
+
+``` json
+{
+    "algorithm": "Prims",
+    "maze-size": "(30,30)",
+    "walls-to-remove": "10",
+    "draw-paths": "True",
+    "path-starting-point": "(0,0)",
+    "path-ending-point": "(29, 29)"
+}
+```
+To know by what name algorithms are recognized checkout
+[`ParseConfig.hs`](https://github.com/Average-user/MazeGen/blob/master/src/ParseConfig.hs).
+
+`walls-to-remove` refers to the amount of walls to remove from the maze to make
+a non-perfect maze. The default 0, generates perfect mazes (one and only one
+path from any place to another).
+
+When `draw-paths` is on, it I'll draw shortest paths in red, and the more large
+ones in purple.
+
+An example of default `config.json`:
 
 ``` text
 stack build
-stack exec MazeGen-exe p r a n m
-```
-
-**p**, **r** **a**, **n** and **m** are Integers.
-Only when **p** is 1  paths will be drawn, in any other case
-it will just be the maze. **r** indicates, the amount of walls to be removed, to
-make non-perfect mazes. If perfect mazes are desired, let r = 0. When paths are
-drawn, the red ones will be the shorter ones.
-
-**a** stands for the algorithm you can see here the order:
-
-``` haskell
-pickAlgorithm n = case n of
-                    1 -> Sidewinder.generate
-                    2 -> Prims.generate
-                    3 -> GrowingTree.generate
-                    4 -> HuntKill.generate
-                    5 -> Backtracker.generate
-```
-
-**n** and **m** are the sizes of the maze, horizontal an vertical respectively.
-
-An example of a 50x50 maze, with path included:
-
-``` text
-stack exec MazeGen-exe 1 0 5 50 50
+stack exec MazeGen-exe
 ```
 
 ![](https://github.com/Average-user/MazeGen/blob/master/Pictures/example.png)

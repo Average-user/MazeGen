@@ -5,13 +5,13 @@ module Main where
 import           Data.Array
 import           Data.Maybe
 import qualified Data.Set as S
-import           Data.Time.Clock
 import           Graphics.Gloss
 import           Graphics.Gloss.Interface.Environment (getScreenSize)
 import           Solver
-import           System.Environment (getArgs)
 import           System.Random (getStdGen, StdGen)
 import           Utils
+import           ParseConfig
+import qualified Data.ByteString.Lazy as B
 
 -- | Algorithms implemented so far
 import qualified HuntKill
@@ -20,13 +20,12 @@ import qualified Prims
 import qualified GrowingTree
 import qualified Backtracker
 
-pickAlgorithm :: Int -> (Int -> (Int,Int) -> StdGen -> Graph)
-pickAlgorithm n = case n of
-                    1 -> nonPerfect Sidewinder.generate
-                    2 -> nonPerfect Prims.generate
-                    3 -> nonPerfect GrowingTree.generate
-                    4 -> nonPerfect HuntKill.generate
-                    5 -> nonPerfect Backtracker.generate
+getAlgorithm :: Algorithm -> ((Int, Int) -> StdGen -> Graph)
+getAlgorithm Backtracker = Backtracker.generate
+getAlgorithm Prims       = Prims.generate
+getAlgorithm HuntKill    = HuntKill.generate
+getAlgorithm Sidewinder  = Sidewinder.generate
+getAlgorithm GrowingTree = GrowingTree.generate
 
 -- | Draw walls to de the adjacent cell of (x,y) that are not connected with it
 drawWalls ::
@@ -64,25 +63,27 @@ getConstant w h n m = min ((w-c1-c1) / n) ((h-c1-c1) / m)
 main :: IO ()
 main = do
   gen     <- getStdGen
-  args    <- map read <$> getArgs
   (w',h') <- getScreenSize
-  let (w,h)      = (fromIntegral w', fromIntegral h')
-      s c (x,y)  = ((x*c) - (w/2) + c1, (h/2) - c1 - (y*c))
-      s' c (x,y) = s c (fromIntegral x, fromIntegral y)
-      [p,r,a,n,m]= args
-      c          = getConstant w h (fromIntegral n) (fromIntegral m)
-      hc         = c/2
-      !graph     = pickAlgorithm a r (n,m) gen
-      grid       = Pictures $ map (drawWalls (s' c) graph) (indices graph)
-      pathsC     = paths graph (0,0) (n-1,m-1)
-      minL       = minimum (map length pathsC)
-      shortOnes  = filter ((==minL) . length) pathsC
-      largeOnes  = filter ((/=minL) . length) pathsC
-      sols       = map (Color violet . line . map (f 0 . s' c)) largeOnes
-      goodSols   = map (Color red . line . map (f 0 . s' c)) shortOnes
-      f z (x,y)  = (x + hc + z, y - hc + z)
-      startp     = square (s c) (0,0) red
-      goalp      = square (s c) (fromIntegral (n-1), fromIntegral (m-1)) red
-  display FullScreen white (if p == 1
-                             then Pictures (sols ++ goodSols ++ [startp, goalp, grid])
-                             else grid)
+  configF <- B.readFile "config.json"
+  case parseConfig configF of
+    Left errorMsg -> putStrLn errorMsg
+    Right (Config alg (n,m) r p (sx,sy) (ex,ey)) ->
+      do let (w,h)      = (fromIntegral w', fromIntegral h')
+             s c (x,y)  = ((x*c) - (w/2) + c1, (h/2) - c1 - (y*c))
+             s' c (x,y) = s c (fromIntegral x, fromIntegral y)
+             c          = getConstant w h (fromIntegral n) (fromIntegral m)
+             hc         = c/2
+             !graph     = nonPerfect (getAlgorithm alg) r (n,m) gen
+             grid       = Pictures $ map (drawWalls (s' c) graph) (indices graph)
+             pathsC     = paths graph (sx,sy) (ex,ey)
+             minL       = minimum (map length pathsC)
+             shortOnes  = filter ((==minL) . length) pathsC
+             largeOnes  = filter ((/=minL) . length) pathsC
+             sols       = map (Color violet . line . map (f 0 . s' c)) largeOnes
+             goodSols   = map (Color red . line . map (f 0 . s' c)) shortOnes
+             f z (x,y)  = (x + hc + z, y - hc + z)
+             startp     = square (s c) (fromIntegral sx, fromIntegral sy) red
+             goalp      = square (s c) (fromIntegral ex, fromIntegral ey) red
+         display FullScreen white (if p
+                                    then Pictures (sols ++ goodSols ++ [startp, goalp, grid])
+                                    else grid)
