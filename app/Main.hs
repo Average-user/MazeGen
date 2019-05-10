@@ -2,6 +2,7 @@
 
 module Main where
 
+import           Data.Array
 import           Data.Maybe
 import qualified Data.Set as S
 import           Data.Time.Clock
@@ -11,8 +12,6 @@ import           Solver
 import           System.Environment (getArgs)
 import           System.Random (getStdGen, StdGen)
 import           Utils
-import           Data.List ((\\))
-import           Data.Array
 
 -- | Algorithms implemented so far
 import qualified HuntKill

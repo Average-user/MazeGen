@@ -20,23 +20,21 @@ neighbors (n,m) (x,y) = filter f $ map ((+) x *** (+) y) [(1,0),(0,1),(-1,0),(0,
 
 
 connect :: Graph -> Coord -> Coord -> Graph
-connect g a b = accum (\x y -> y : x) g [(a, b), (b, a)]
+connect g a b = accum (flip (:)) g [(a, b), (b, a)]
 
 sample :: [a] -> StdGen -> (a, StdGen)
 sample xs g = (xs!!i, ng)
   where
     (i, ng) = randomR (0, length xs - 1) g
 
-{-
-connected :: Ord a => M.Map a (S.Set a) -> [S.Set a] 
-connected g = r (M.keys g) S.empty 
+connected :: Ix a => Array a [a] -> [S.Set a] 
+connected g = r (indices g) S.empty 
   where
     r []     _ = [] 
     r (x:xs) v = if x `S.member` v then r xs v else s xs v [x] S.empty 
     s xs v    []  w                  = w : r xs (v `S.union` w) 
     s xs v (y:ys) w | y `S.member` w = s xs v ys w
-                    | otherwise      = s xs v (ys ++ S.toList (g M.! y)) (S.insert y w)
--}
+                    | otherwise      = s xs v (ys ++ (g ! y)) (S.insert y w)
 
 closedWalls :: (Int,Int) -> Graph -> [(Coord, Coord)]
 closedWalls (n,m) graph = S.toList (S.fromList all S.\\ S.fromList occupied)
