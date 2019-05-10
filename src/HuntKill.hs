@@ -1,10 +1,9 @@
 module HuntKill where
 
 import Data.Set (Set, insert, notMember, member, singleton)
-import Data.Map (toList)
 import System.Random (StdGen, randomR)
-
 import Utils
+import Data.Array
 
 walk :: (Int, Int) -> Coord -> Graph -> Set Coord -> StdGen -> Graph
 walk (n,m) coord graph seen g
@@ -17,7 +16,7 @@ walk (n,m) coord graph seen g
 
 hunt :: Coord -> Graph -> Set Coord -> StdGen -> Graph
 hunt (n,m) graph seen g =
-  case find (toList graph) of
+  case find (assocs graph) of
     Just (s,c) -> walk (n,m) s (connect graph s c) (insert s seen) g
     Nothing    -> graph
   where

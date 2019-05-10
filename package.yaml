@@ -3,7 +3,7 @@ version:             0.1.0.0
 github:              "Average-user/MazeGen"
 license:             MIT
 author:              "Lucas Polymeris"
-maintainer:          "lucaspolymeris@pm.me"
+maintainer:          "lucaspolymeris@protonmail.com"
 copyright:           "2018 Lucas Polymeris"
 
 extra-source-files:
@@ -25,6 +25,8 @@ dependencies:
 - random
 - time
 - gloss
+- array
+- QuickCheck
 
 library:
   source-dirs: src
