@@ -38,6 +38,13 @@ connected g = r (indices g) S.empty
     s xs v (y:ys) w | y `S.member` w = s xs v ys w
                     | otherwise      = s xs v (ys ++ (g ! y)) (S.insert y w)
 
+acyclic :: Graph -> Bool
+acyclic graph = f S.empty (-1,-1) (0,0)
+  where
+    f seen prev node = S.notMember node seen && all (f (S.insert node seen) node) newNodes
+      where
+        newNodes = filter (/=prev) (graph ! node)
+
 closedWalls :: (Int,Int) -> Graph -> [(Coord, Coord)]
 closedWalls (n,m) graph = S.toList (S.fromList all S.\\ S.fromList occupied)
   where
