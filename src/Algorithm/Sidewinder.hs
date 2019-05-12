@@ -1,9 +1,7 @@
 module Algorithm.Sidewinder where
 
-import qualified Data.Map as M
-import qualified Data.Set as S
-import           System.Random (StdGen, randomR)
-import           Utils
+import System.Random (StdGen)
+import Utils
 
 firstRow :: (Int, Int) -> Graph -> Graph
 firstRow (n,m) g =

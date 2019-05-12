@@ -1,8 +1,8 @@
 {
-    "algorithm": "Prims",
-    "maze-size": "(30,30)",
-    "walls-to-remove": "10",
-    "draw-paths": "True",
+    "algorithm": "Kruskals",
+    "maze-size": "(100,100)",
+    "walls-to-remove": "0",
+    "draw-paths": "False",
     "path-starting-point": "(0,0)",
     "path-ending-point": "(29,29)"
 }

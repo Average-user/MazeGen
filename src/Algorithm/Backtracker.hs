@@ -1,7 +1,6 @@
 module Algorithm.Backtracker where
 
 import Utils
-import qualified Data.Map as M
 import qualified Data.Set as S
 import System.Random (StdGen, randomR)
 

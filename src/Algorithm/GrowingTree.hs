@@ -2,7 +2,6 @@ module Algorithm.GrowingTree where
 
 import Utils
 import qualified Data.Set as S
-import qualified Data.Map as M
 import System.Random (StdGen, randomR)
 import Data.List (delete)
 
