@@ -15,6 +15,7 @@ Algorithms implemented so far
 - [Randomized Prims](https://github.com/Average-user/MazeGen/tree/master/src/Algorithm/Prims.hs)
 - [Recursive Backtracker](https://github.com/Average-user/MazeGen/tree/master/src/Algorithm/Backtracker.hs)
 - [Sidewinder](https://github.com/Average-user/MazeGen/tree/master/src/Algorithm/Sidewinder.hs)
+- [Randomized Kruskals](https://github.com/Average-user/MazeGen/tree/master/src/Algorithm/Kruskals.hs)
 
 #### Usage
 

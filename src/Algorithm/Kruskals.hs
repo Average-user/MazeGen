@@ -18,10 +18,10 @@ generate (n,m) g = f edges (start n m) sets
   where
     edges        = fst (shuffle (genEdges (n,m)) g)
     (sets, maps) = createSets (n,m)
-    f []         graph _    = graph
+    f []         graph _               = graph
     f ((a,b):es) graph sets
       | fst (ID.equivalent ia ib sets) = f es graph sets
-      | otherwise           = f es (connect graph a b) (ID.union ia ib sets)
+      | otherwise                      = f es (connect graph a b) (ID.union ia ib sets)
       where
         ia = maps ! a
         ib = maps ! b
