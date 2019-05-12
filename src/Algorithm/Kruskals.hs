@@ -16,7 +16,7 @@ createSets (n,m) =
 generate :: (Int, Int) -> StdGen -> Graph
 generate (n,m) g = f edges (start n m) sets
   where
-    edges        = fst (fisherYates g (genEdges (n,m)))
+    edges        = fst (shuffle (genEdges (n,m)) g)
     (sets, maps) = createSets (n,m)
     f []         graph _    = graph
     f ((a,b):es) graph sets

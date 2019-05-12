@@ -1,10 +1,13 @@
 module Utils where
 
-import Data.Array
 import Control.Arrow ((***))
-import System.Random
+import Control.Monad
+import Control.Monad.ST
+import Data.Array
+import Data.Array.ST
+import Data.STRef
 import qualified Data.Set as S
-import qualified Data.Map as M
+import System.Random
 
 type Coord = (Int, Int)
 type Graph = Array Coord [Coord]
@@ -46,21 +49,28 @@ removeRandomWalls :: StdGen -> (Int, Int) -> Int -> Graph -> Graph
 removeRandomWalls g (n,m) c graph = foldl (\g (a,b) -> connect g a b) graph chosen
   where
     options = closedWalls (n,m) graph
-    chosen  = take c (fst (fisherYates g options))
-
-fisherYatesStep :: (M.Map Int a, StdGen) -> (Int, a) -> (M.Map Int a, StdGen)
-fisherYatesStep (m, gen) (i, x) = ((M.insert j x . M.insert i (m M.! j)) m, gen')
-  where
-    (j, gen') = randomR (0, i) gen
-
-fisherYates :: StdGen -> [a] -> ([a], StdGen)
-fisherYates gen [] = ([], gen)
-fisherYates gen l = 
-  toElems $ foldl fisherYatesStep (initial (head l) gen) (numerate (tail l))
-  where
-    toElems (x, y) = (M.elems x, y)
-    numerate = zip [1..]
-    initial x gen = (M.singleton 0 x, gen)
+    chosen  = take c (fst (shuffle options g))
 
 nonPerfect :: ((Int, Int) -> StdGen -> Graph) -> Int -> (Int,Int) -> StdGen -> Graph
 nonPerfect perfect c (n,m) g = removeRandomWalls g (n,m) c (perfect (n,m) g)
+
+shuffle :: [a] -> StdGen -> ([a],StdGen)
+shuffle xs gen = runST (do
+        g <- newSTRef gen
+        let randomRST lohi = do
+              (a,s') <- liftM (randomR lohi) (readSTRef g)
+              writeSTRef g s'
+              return a
+        ar <- newArray n xs
+        xs' <- forM [1..n] $ \i -> do
+                j <- randomRST (i,n)
+                vi <- readArray ar i
+                vj <- readArray ar j
+                writeArray ar j vi
+                return vj
+        gen' <- readSTRef g
+        return (xs',gen'))
+  where
+    n = length xs
+    newArray :: Int -> [a] -> ST s (STArray s Int a)
+    newArray n xs =  newListArray (1,n) xs
