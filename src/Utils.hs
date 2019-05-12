@@ -10,8 +10,7 @@ type Coord = (Int, Int)
 type Graph = Array Coord [Coord]
 
 start :: Int -> Int -> Graph
-start n m = listArray ((0,0), (n-1,m-1)) [[] | x <- [0..n-1], y <- [0..m-1]]
-
+start n m = listArray ((0,0), (n-1,m-1)) (repeat [])
 
 neighbors :: Coord -> Coord -> [Coord]
 neighbors (n,m) (x,y) = filter f $ map ((+) x *** (+) y) [(1,0),(0,1),(-1,0),(0,-1)]

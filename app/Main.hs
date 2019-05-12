@@ -4,7 +4,6 @@ module Main where
 
 import           Data.Array
 import           Data.Maybe
-import qualified Data.Set as S
 import           Graphics.Gloss
 import           Graphics.Gloss.Interface.Environment (getScreenSize)
 import           Solver
@@ -19,6 +18,7 @@ import qualified Algorithm.Sidewinder
 import qualified Algorithm.Prims
 import qualified Algorithm.GrowingTree
 import qualified Algorithm.Backtracker
+import qualified Algorithm.Kruskals
 
 getAlgorithm :: Algorithm -> ((Int, Int) -> StdGen -> Graph)
 getAlgorithm Backtracker = Algorithm.Backtracker.generate
@@ -26,6 +26,7 @@ getAlgorithm Prims       = Algorithm.Prims.generate
 getAlgorithm HuntKill    = Algorithm.HuntKill.generate
 getAlgorithm Sidewinder  = Algorithm.Sidewinder.generate
 getAlgorithm GrowingTree = Algorithm.GrowingTree.generate
+getAlgorithm Kruskals    = Algorithm.Kruskals.generate
 
 -- | Draw walls to de the adjacent cell of (x,y) that are not connected with it
 drawWalls ::

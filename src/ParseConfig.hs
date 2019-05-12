@@ -5,9 +5,7 @@ module ParseConfig where
 import Safe
 import Data.Aeson
 import Data.Aeson.Types
-import Data.Aeson.Parser
 import Data.Text as T
-import Data.Word
 import Control.Monad
 import Data.ByteString.Lazy
 
@@ -15,7 +13,8 @@ data Algorithm = Backtracker
                | Prims
                | HuntKill
                | GrowingTree
-               | Sidewinder deriving (Show, Read)
+               | Sidewinder
+               | Kruskals deriving (Show, Read)
 
 data Config = Config Algorithm (Int,Int) Int Bool (Int,Int) (Int,Int) deriving Show
 
