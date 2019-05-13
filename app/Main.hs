@@ -2,7 +2,6 @@
 
 module Main where
 
-import           Data.Array
 import           Data.Maybe
 import           Graphics.Gloss
 import           Graphics.Gloss.Interface.Environment (getScreenSize)
@@ -11,6 +10,7 @@ import           System.Random (getStdGen, StdGen)
 import           Utils
 import           ParseConfig
 import qualified Data.ByteString.Lazy as B
+import           Data.Map.Strict ((!),  keys)
 
 -- | Algorithms implemented so far
 import qualified Algorithm.HuntKill
@@ -76,8 +76,8 @@ main = do
              s' c (x,y) = s c (fromIntegral x, fromIntegral y)
              c          = getConstant w h (fromIntegral n) (fromIntegral m)
              hc         = c/2
-             !graph     = (getAlgorithm alg) (n,m) gen
-             grid       = Pictures $ map (drawWalls (s' c) graph) (indices graph)
+             !graph     = nonPerfect (getAlgorithm alg) r (n,m) gen
+             grid       = Pictures $ map (drawWalls (s' c) graph) (keys graph)
              pathsC     = paths graph (sx,sy) (ex,ey)
              minL       = minimum (map length pathsC)
              shortOnes  = filter ((==minL) . length) pathsC

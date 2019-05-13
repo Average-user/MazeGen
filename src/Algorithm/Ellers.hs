@@ -1,11 +1,10 @@
 module Algorithm.Ellers where
 
-import Utils
-import System.Random
-import qualified Data.Map as M
-import Data.Array
-import Data.List
 import Data.Function
+import Data.List
+import qualified Data.Map.Strict as M
+import System.Random
+import Utils
 
 randBool :: StdGen -> (Bool, StdGen)
 randBool g = let (i,g') = randomR ((0,1) :: Coord) g in (i == 1, g')

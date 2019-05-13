@@ -3,53 +3,52 @@ module Utils where
 import Control.Arrow ((***))
 import Control.Monad
 import Control.Monad.ST
-import Data.Array
 import Data.Array.ST
+import qualified Data.Map.Strict as M
 import Data.STRef
 import qualified Data.Set as S
 import System.Random
 
 type Coord = (Int, Int)
-type Graph = Array Coord [Coord]
+type Graph = M.Map Coord [Coord]
 
 start :: Int -> Int -> Graph
-start n m = listArray ((0,0), (n-1,m-1)) (repeat [])
+start n m = M.fromList [((x,y), []) | x <- [0..n-1], y <- [0..m-1]]
 
 neighbors :: Coord -> Coord -> [Coord]
 neighbors (n,m) (x,y) = filter f $ map ((+) x *** (+) y) [(1,0),(0,1),(-1,0),(0,-1)]
   where
     f (x,y) = not $ x < 0 || y < 0 || x >= n || y >= m
 
-
 connect :: Graph -> Coord -> Coord -> Graph
-connect g a b = accum (flip (:)) g [(a, b), (b, a)]
+connect g a b = M.adjust (\x -> b:x) a $ M.adjust (\x -> a:x) b g
 
 sample :: [a] -> StdGen -> (a, StdGen)
 sample xs g = (xs!!i, ng)
   where
     (i, ng) = randomR (0, length xs - 1) g
 
-connected :: Ix a => Array a [a] -> [S.Set a] 
-connected g = r (indices g) S.empty 
+connected :: Ord a => M.Map a [a] -> [S.Set a] 
+connected g = r (M.keys g) S.empty 
   where
     r []     _ = [] 
     r (x:xs) v = if x `S.member` v then r xs v else s xs v [x] S.empty 
     s xs v    []  w                  = w : r xs (v `S.union` w) 
     s xs v (y:ys) w | y `S.member` w = s xs v ys w
-                    | otherwise      = s xs v (ys ++ (g ! y)) (S.insert y w)
+                    | otherwise      = s xs v (ys ++ (g M.! y)) (S.insert y w)
 
 acyclic :: Graph -> Bool
 acyclic graph = f S.empty (-1,-1) (0,0)
   where
     f seen prev node = S.notMember node seen && all (f (S.insert node seen) node) newNodes
       where
-        newNodes = filter (/=prev) (graph ! node)
+        newNodes = filter (/=prev) (graph M.! node)
 
 closedWalls :: (Int,Int) -> Graph -> [(Coord, Coord)]
 closedWalls (n,m) graph = S.toList (S.fromList all S.\\ S.fromList occupied)
   where
-    all      = indices graph >>= \x ->  map ((,) x) (neighbors (n,m) x)
-    occupied = assocs graph >>= \(k, ks) -> map ((,) k) ks
+    all      = M.keys graph >>= \x ->  map ((,) x) (neighbors (n,m) x)
+    occupied = M.toList graph >>= \(k, ks) -> map ((,) k) ks
 
 
 removeRandomWalls :: StdGen -> (Int, Int) -> Int -> Graph -> Graph

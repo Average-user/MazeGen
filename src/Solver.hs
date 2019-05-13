@@ -1,9 +1,9 @@
 module Solver where
 
 import qualified Data.Set as S
-import Data.Array
+import Data.Map.Strict (Map, (!))
 
-paths :: Ix a => Array a [a] -> a -> a -> [[a]]
+paths :: Ord a => Map a [a] -> a -> a -> [[a]]
 paths graph s e = dfs (S.singleton s) [s] =<< graph ! s
   where
     dfs seen (p:acc) n
