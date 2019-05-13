@@ -16,6 +16,7 @@ Algorithms implemented so far
 - [Recursive Backtracker](https://github.com/Average-user/MazeGen/tree/master/src/Algorithm/Backtracker.hs)
 - [Sidewinder](https://github.com/Average-user/MazeGen/tree/master/src/Algorithm/Sidewinder.hs)
 - [Randomized Kruskals](https://github.com/Average-user/MazeGen/tree/master/src/Algorithm/Kruskals.hs)
+- [Eller's Algorithm](https://github.com/Average-user/MazeGen/blob/master/src/Algorithm/Ellers.hs)
 
 #### Usage
 
