@@ -32,6 +32,7 @@ dependencies:
 - bytestring
 - time
 - disjoint-set
+- criterion
 
 library:
   source-dirs: src
@@ -51,6 +52,17 @@ tests:
   MazeGen-test:
     main:                Spec.hs
     source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - MazeGen
+
+benchmarks:
+  MazeGen-bench:
+    main:                Bench.hs
+    source-dirs:         bench
     ghc-options:
     - -threaded
     - -rtsopts

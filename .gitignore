@@ -1,3 +1,4 @@
 .stack-work/
 MazeGen.cabal
 *~
+bench.html
