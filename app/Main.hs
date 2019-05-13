@@ -19,6 +19,7 @@ import qualified Algorithm.Prims
 import qualified Algorithm.GrowingTree
 import qualified Algorithm.Backtracker
 import qualified Algorithm.Kruskals
+import qualified Algorithm.Ellers
 
 getAlgorithm :: Algorithm -> ((Int, Int) -> StdGen -> Graph)
 getAlgorithm Backtracker = Algorithm.Backtracker.generate
@@ -27,6 +28,7 @@ getAlgorithm HuntKill    = Algorithm.HuntKill.generate
 getAlgorithm Sidewinder  = Algorithm.Sidewinder.generate
 getAlgorithm GrowingTree = Algorithm.GrowingTree.generate
 getAlgorithm Kruskals    = Algorithm.Kruskals.generate
+getAlgorithm Ellers      = Algorithm.Ellers.generate
 
 -- | Draw walls to de the adjacent cell of (x,y) that are not connected with it
 drawWalls ::
@@ -74,7 +76,7 @@ main = do
              s' c (x,y) = s c (fromIntegral x, fromIntegral y)
              c          = getConstant w h (fromIntegral n) (fromIntegral m)
              hc         = c/2
-             !graph     = nonPerfect (getAlgorithm alg) r (n,m) gen
+             !graph     = (getAlgorithm alg) (n,m) gen
              grid       = Pictures $ map (drawWalls (s' c) graph) (indices graph)
              pathsC     = paths graph (sx,sy) (ex,ey)
              minL       = minimum (map length pathsC)

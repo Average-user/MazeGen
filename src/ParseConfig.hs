@@ -14,7 +14,8 @@ data Algorithm = Backtracker
                | HuntKill
                | GrowingTree
                | Sidewinder
-               | Kruskals deriving (Show, Read)
+               | Kruskals
+               | Ellers deriving (Show, Read)
 
 data Config = Config Algorithm (Int,Int) Int Bool (Int,Int) (Int,Int) deriving Show
 

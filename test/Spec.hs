@@ -13,6 +13,7 @@ import qualified Algorithm.Prims
 import qualified Algorithm.GrowingTree
 import qualified Algorithm.Backtracker
 import qualified Algorithm.Kruskals
+import qualified Algorithm.Ellers
 
 implies :: Bool -> Bool -> Bool
 implies a b = not a || b 
@@ -39,12 +40,13 @@ testAlgorithm s alg = do
 
 main :: IO ()
 main = do
-  testAlgorithm "\nTesting Huntkill: \n"    Algorithm.HuntKill.generate
+  testAlgorithm "\nTesting Huntkill: \n"  Algorithm.HuntKill.generate
   testAlgorithm "Testing Sidewinder: \n"  Algorithm.HuntKill.generate
   testAlgorithm "Testing Prims: \n"       Algorithm.HuntKill.generate
   testAlgorithm "Testing GrowingTree: \n" Algorithm.HuntKill.generate
   testAlgorithm "Testing Backtracker: \n" Algorithm.HuntKill.generate
   testAlgorithm "Testing Kruskals: \n"    Algorithm.HuntKill.generate
+  testAlgorithm "Testing Ellers: \n"      Algorithm.HuntKill.generate
 
 timeIO :: String -> IO () -> IO ()
 timeIO msg f = do
