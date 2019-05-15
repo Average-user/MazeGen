@@ -52,4 +52,33 @@ stack exec MazeGen-exe
 
 ![](https://github.com/Average-user/MazeGen/blob/master/Pictures/example.png)
 
+
+#### Test And Benchmarks
+
+You can run some random tests using
+[QuickCheck](https://hackage.haskell.org/package/QuickCheck) with:
+
+``` text
+stack test
 ```
+
+And benchmarks using [
+criterion](https://hackage.haskell.org/package/criterion) with:
+
+``` text
+stack bench
+```
+Although is recommended to use
+
+``` text
+stack bench --ba='-o bench.html'
+```
+
+To output benchmarks results in an `.html` file. That looks like:
+
+![](https://github.com/Average-user/MazeGen/blob/master/Pictures/bench.png)
+
+Let us say that this benchmarks will always run with the same Random Gen. This
+means that every time you run it, it'll measure the time of the same process,
+that will not be affected by randomness, but only by changes to the algorithms.
+The Random Gen chosen is completely arbitrary.
