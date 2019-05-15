@@ -19,33 +19,22 @@ pickAtLeast1 g xs = if null chosen then ([xs!!index], g'') else (chosen, g')
       where
         (b, g') = randBool g
 
-connectRight ::
-  StdGen ->
-  Int ->
-  Int ->
-  M.Map Coord Int ->
-  Graph ->
-  (M.Map Coord Int, Graph, StdGen)
-connectRight g n y prevI graph = f row g ident graph
+connectRight :: StdGen -> Bool -> Int -> Int -> M.Map Int Int -> Graph -> (M.Map Int Int, Graph, StdGen)
+connectRight g lastRow n y prevI graph = f row g ident graph
   where
-    row   = zip [0..n-1] (repeat y)
+    row   = [0..n-1]
     ident = M.union prevI (M.fromList (zip row [n*y, n*y + 1 .. n*(y+1)-1]))
-    f [a]      gen i graph = (i, graph, g)
+    f [a]      gen i graph  = (i, graph, g)
     f (a:b:rs) gen i graph
-      | not c || (ia == ib) = f (b:rs) gen' i graph
-      | otherwise           = f (b:rs) gen' i' (connect graph a b)
+      | lastRow && ia /= ib = f (b:rs) gen' i' (connect graph (a,y) (b,y)) 
+      | not c || (ia == ib) = f (b:rs) gen' i  graph
+      | otherwise           = f (b:rs) gen' i' (connect graph (a,y) (b,y))
       where
         (c, gen') = randBool gen
         (ia, ib)  = (i M.! a, i M.! b)
         i'        = M.map (\n -> if n == ib then ia else n) i
 
-connectBottom ::
-  StdGen ->
-  Int ->
-  Int ->
-  M.Map Coord Int ->
-  Graph ->
-  (M.Map Coord Int, Graph, StdGen)
+connectBottom :: StdGen -> Int -> Int -> M.Map Int Int -> Graph -> (M.Map Int Int, Graph, StdGen)
 connectBottom g n y prevI graph = f g sets M.empty graph
   where
     prevIL   = M.toList prevI
@@ -56,33 +45,16 @@ connectBottom g n y prevI graph = f g sets M.empty graph
     f g ((k,cs):xs) ident graph = f g' xs newIdent newGraph
       where
         (cs', g') = pickAtLeast1 g cs
-        newIdent  = foldl (\m (x,y) -> M.insert (x,y+1) k m) ident cs'
-        newGraph  = foldl (\g (x,y) -> connect g (x,y) (x,y+1)) graph cs'
-
-lastRow ::
-  Int ->
-  Int ->
-  M.Map Coord Int ->
-  Graph ->
-  Graph
-lastRow n y prevI graph = f row ident graph
-  where
-    row   = zip [0..n-1] (repeat y)
-    ident = M.union prevI (M.fromList (zip row [n*y, n*y + 1 .. n*(y+1)-1]))
-    f [a]      i graph = graph
-    f (a:b:rs) i graph
-      | (ia == ib) = f (b:rs) i graph
-      | otherwise  = f (b:rs) i' (connect graph a b)
-      where
-        (ia, ib)  = (i M.! a, i M.! b)
-        i'        = M.map (\n -> if n == ib then ia else n) i
+        newIdent  = foldl (\m x -> M.insert x k m) ident cs'
+        newGraph  = foldl (\g x -> connect g (x,y) (x,y+1)) graph cs'
 
 generate :: Coord -> StdGen -> Graph
 generate (n,m) g = f g n 0 M.empty (start n m)
   where
-    f g n y ident graph | y == m -1 = lastRow n y ident graph
-                        | otherwise = f g'' n (y+1) ident'' graph''
-                        
+    f g n y ident graph
+      | y == m -1 = let (_,newGraph,_) = connectRight g True n y ident graph
+                      in newGraph
+      | otherwise = f g'' n (y+1) ident'' graph''                  
       where
-        (ident', graph', g')    = connectRight g n y ident graph
+        (ident', graph', g')    = connectRight g False n y ident graph
         (ident'', graph'', g'') = connectBottom g' n y ident' graph'
